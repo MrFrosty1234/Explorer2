@@ -19,30 +19,6 @@ public class ColorDetective {
 
     Explorer explorer;
 
-    public static long puckRedRed = 220;
-    public static long puckRedGreen = 100;
-    public static long puckRedBlue = 93;
-    public static long puckBlueRed = 63;
-    public static long puckBlueGreen = 98;
-    public static long puckBlueBlue = 125;
-    public static double minCosPuck = 0.95;
-    public static long puckFieldRed = 1050;
-    public static long puckFieldGreen = 1100;
-    public static long puckFieldBlue = 1050;
-
-
-    public static long fieldRedRed = 117;
-    public static long fieldRedGreen = 60;
-    public static long fieldRedBlue = 58;
-    public static long fieldBlueRed = 38;
-    public static long fieldBlueGreen = 64;
-    public static long fieldBlueBlue = 83;
-    public static double minCosField = 0.95;
-    public static long fieldFieldRed = 230;
-    public static long fieldFieldGreen = 281;
-    public static long fieldFieldBlue = 203;
-
-
     public int ourColor = 0;
 
     public int notOurColor = 0;
@@ -51,35 +27,6 @@ public class ColorDetective {
         explorer = robot;
         colorFieldSensor = fix(explorer.linearOpMode.hardwareMap.get(AdafruitI2cColorSensor.class, "fieldSensor"));
         colorPuckDetectiveSensor = fix(explorer.linearOpMode.hardwareMap.get(AdafruitI2cColorSensor.class, "puckSensor"));
-    }
-
-    double search(AdafruitI2cColorSensor sensor, long r1, long g1, long b1) {
-        double len1, len2, len3;
-        double cosA;
-        len1 = sqrt(r1 * r1 + g1 * g1 + b1 * b1);
-        len2 = sqrt(sensor.red() * sensor.red() + sensor.green() * sensor.green() + sensor.blue() * sensor.blue());
-        len3 = sqrt((r1 - sensor.red()) * (r1 - sensor.red()) + (g1 - sensor.green()) * (g1 - sensor.green()) + (b1 - sensor.blue()) * (b1 - sensor.blue()));
-        if (len1 * len2 != 0) {
-            cosA = (len1 * len1 + len2 * len2 - len3 * len3) / (2 * len1 * len2);
-        } else cosA = 0;
-        return cosA;
-    }
-
-    //color = 0 if void, color = 1 if its blue, color = 2 if its red//
-
-    int puckSearch() {
-        double colorRed = search(colorPuckDetectiveSensor, puckRedRed, puckRedGreen, puckRedBlue);
-        double colorBlue = search(colorPuckDetectiveSensor, puckBlueRed, puckBlueGreen, puckBlueBlue);
-        double colorVoid = search(colorPuckDetectiveSensor, puckFieldRed, puckFieldGreen, puckFieldBlue);
-
-        int color = -1;
-        if (colorBlue < minCosPuck && colorRed < minCosPuck && colorVoid > minCosPuck)
-            color = 0;
-        if (colorBlue > colorRed && colorBlue > colorVoid)
-            color = 1;
-        if (colorRed > colorBlue && colorRed > colorVoid)
-            color = 2;
-        return color;
     }
 
     int puckDetect() {

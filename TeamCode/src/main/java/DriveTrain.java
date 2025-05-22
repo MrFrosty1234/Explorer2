@@ -4,6 +4,7 @@ import static java.lang.Math.signum;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -26,14 +27,17 @@ public class DriveTrain {
 
     public static double v = 1;
 
-
+    public int sum = 0;
+    public static int countOfTurn = 0;
 
     DcMotor leftMotor;
     DcMotor rightMotor;
 
     Explorer explorer;
 
-    TouchSensor button;
+    TouchSensor buttonLeft;
+    TouchSensor buttonRight;
+    AnalogInput sonar;
 
     State state = State.MOVING_TO_WALL;
     ElapsedTime ti;
@@ -50,7 +54,10 @@ public class DriveTrain {
         leftMotor = robot.linearOpMode.hardwareMap.get(DcMotor.class, "leftMotor");
         rightMotor = robot.linearOpMode.hardwareMap.get(DcMotor.class, "rightMotor");
 
-        button = robot.linearOpMode.hardwareMap.get(TouchSensor.class, "buttonLeft");
+        buttonLeft = robot.linearOpMode.hardwareMap.get(TouchSensor.class, "buttonLeft");
+        buttonRight = robot.linearOpMode.hardwareMap.get(TouchSensor.class, "buttonRight");
+
+        sonar = robot.linearOpMode.hardwareMap.get(AnalogInput.class, "sonar");
 
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -105,13 +112,11 @@ public class DriveTrain {
 
     public boolean moveToWall() {
 
-        if (!button.isPressed() && (5 - ti.seconds()) > 0) {
+        if ((!buttonLeft.isPressed() && !buttonRight.isPressed()) && (5 - ti.seconds()) > 0) {
 
             FtcDashboard.getInstance().getTelemetry().addData("time", ti.seconds());
-            FtcDashboard.getInstance().getTelemetry().addData("button", button.getValue());
+            FtcDashboard.getInstance().getTelemetry().addData("button", buttonLeft.getValue());
             FtcDashboard.getInstance().getTelemetry().update();
-
-
 
             leftMotor.setPower(1);
             rightMotor.setPower(1);
@@ -129,12 +134,12 @@ public class DriveTrain {
 
         double errZ = angle - explorer.gyro.getAngle();
 
-        if (abs(errZ) > 10 && (1 - ti.seconds()) > 0) {
+        if (abs(errZ) > 5 && (1 - ti.seconds()) > 0) {
             errZ = angle - explorer.gyro.getAngle();
 
             double power = pid.update(errZ);
 
-            if(abs(power) > 0.9)
+            if (abs(power) > 0.9)
                 power = 0.9 * signum(power);
 
 
@@ -150,9 +155,47 @@ public class DriveTrain {
         return false;
     }
 
+    public boolean turnRightWheel(double angle) {
+        double errZ = angle - explorer.gyro.getAngle();
+        errZ = angle - explorer.gyro.getAngle();
+
+        double power = pid.update(errZ);
+
+        if (abs(power) > 0.9) {
+            power = 0.9 * signum(power);
+
+
+            leftMotor.setPower(power);
+            FtcDashboard.getInstance().getTelemetry().addData("powa", power);
+            FtcDashboard.getInstance().getTelemetry().update();
+            return true;
+        }
+        explorer.gyro.reset();
+        ti.reset();
+        state = State.MOVING_TO_WALL;
+        return false;
+    }
+
+    public boolean moveWithSonar() {
+        if (sonar.getVoltage() < 0.3 && (5 - ti.seconds()) > 0) {
+
+            FtcDashboard.getInstance().getTelemetry().addData("time", ti.seconds());
+            FtcDashboard.getInstance().getTelemetry().addData("soanr voltage", sonar.getVoltage());
+            FtcDashboard.getInstance().getTelemetry().update();
+
+            leftMotor.setPower(1);
+            rightMotor.setPower(1);
+            return true;
+        }
+        stop();
+        ti.reset();
+        state = State.TURNING;
+        return false;
+    }
+
 
     public enum State {
-        MOVING_WITH_ENCODERS, OFF, MOVING_TO_WALL,TURNING
+        MOVING_WITH_ENCODERS, OFF, MOVING_TO_WALL, TURNING, TURNING_WITH_ONE_WHEEL
     }
 
     public void update() {
@@ -168,13 +211,15 @@ public class DriveTrain {
                 break;
             case TURNING:
                 double angle = random();
-                if(abs(angle) < 80) {
+                if (abs(angle) < 80)
                     angle = 80;
-                }
-                if(abs(angle) > 100){
+                if (abs(angle) > 100)
                     angle = 100;
-                }
-                turn(angle);
+                if (sum < countOfTurn) {
+                    turnRightWheel(angle);
+                    sum++;
+                } else
+                    turn(angle);
                 break;
         }
     }

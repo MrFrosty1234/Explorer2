@@ -1,15 +1,12 @@
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.State;
-
 
 @TeleOp
 
-public class MainCode extends LinearOpMode {
+public class OpModeRomochka extends LinearOpMode {
 
     Explorer explorer = null;
     public static double sepraratorMove;
@@ -55,7 +52,7 @@ public class MainCode extends LinearOpMode {
 
 
             // FtcDashboard.getInstance().getTelemetry().addData("time", explorer.driveTrain.ti.seconds());
-            FtcDashboard.getInstance().getTelemetry().addData("button", explorer.driveTrain.button.getValue());
+            FtcDashboard.getInstance().getTelemetry().addData("button", explorer.driveTrain.buttonLeft.getValue());
             FtcDashboard.getInstance().getTelemetry().addData("time", explorer.driveTrain.ti.seconds());
             FtcDashboard.getInstance().getTelemetry().addData("red", explorer.colorDetective.colorFieldSensor.red());
             FtcDashboard.getInstance().getTelemetry().addData("blue", explorer.colorDetective.colorFieldSensor.blue());
