@@ -29,23 +29,24 @@ public class ColorDetective {
         colorPuckDetectiveSensor = fix(explorer.linearOpMode.hardwareMap.get(AdafruitI2cColorSensor.class, "puckSensor"));
     }
 
-    int puckDetect() {
-        if (colorPuckDetectiveSensor.red() > 30 && colorPuckDetectiveSensor.blue() > 30 && colorPuckDetectiveSensor.green() > 30) {
+    public int puckDetect() {
+        if (colorPuckDetectiveSensor.red() > colorPuckDetectiveSensor.green() || colorPuckDetectiveSensor.blue() > colorPuckDetectiveSensor.green()) {
+
             if (colorPuckDetectiveSensor.red() > colorPuckDetectiveSensor.blue())
                 return 1;
             if (colorPuckDetectiveSensor.blue() > colorPuckDetectiveSensor.red())
                 return 2;
-        } else return 0;
+        }
         return 0;
     }
 
-    int fieldDetect() {
-        if (colorFieldSensor.red() < 200 && colorFieldSensor.blue() < 200 && colorFieldSensor.green() < 200 ) {
+   public int fieldDetect() {
+        if (colorFieldSensor.red() < 350 && colorFieldSensor.blue() < 350 && colorFieldSensor.green() < 350 ) {
             if (colorFieldSensor.red() > colorFieldSensor.blue())
                 return 1;
             if (colorFieldSensor.blue() > colorFieldSensor.red())
                 return 2;
-        } else return 0;
+        }
         return 0;
     }
 
@@ -61,7 +62,7 @@ public class ColorDetective {
             statePuck = explorer.sortingAndKeep.separatorPosition(0);
             return false;
         }
-        if (t - time > 0.5 && field != 1 && field != 2) {
+        if (t - time > 1 && field == 0) {
             t = System.currentTimeMillis() / 1000.0;
             if (color == ourColor) {
                 statePuck = explorer.sortingAndKeep.separatorPosition(1);

@@ -16,10 +16,10 @@ public class SortingAndKeep {
     Servo outServo;
     DcMotor brush;
 
-    public static double closeServoPosition = 0.94;
-    public static double openServoPosition = 0.8;
+    public static double closeServoPosition = 0.53;
+    public static double openServoPosition = 0.44;
 
-    public static double oneSeparatorMove = 240;
+    public static double oneSeparatorMove = 220;
 
 
     PID pid;
@@ -40,7 +40,7 @@ public class SortingAndKeep {
 
         separatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        brush.setDirection(DcMotorSimple.Direction.REVERSE);
+        brush.setDirection(DcMotorSimple.Direction.FORWARD);
         reset();
 
         pid = new PID(kPX, kDX, kIX);
@@ -63,7 +63,7 @@ public class SortingAndKeep {
     }
 
     public boolean brushOn(){
-        brush.setPower(0.9);
+        brush.setPower(1);
         return true;
     }
 
@@ -84,10 +84,10 @@ public class SortingAndKeep {
 
         err = position - separatorMotor.getCurrentPosition();
 
-       // t = System.currentTimeMillis() / 1000.0;
+        // t = System.currentTimeMillis() / 1000.0;
 
-       // if (abs(orientation) >= 0.1) {
-            time = t;
+        // if (abs(orientation) >= 0.1) {
+        time = t;
         //}
 
         if (abs(err) > 5) {
