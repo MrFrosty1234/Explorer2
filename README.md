@@ -652,7 +652,7 @@ This is a bug fix only release to address the following four issues.
 * Android Studio users need to be connected to the Internet the first time they build the app (in order to download needed packages for the build).
 * Version 5.5 was a moderately large off-season, August 2020, drop.  It's worth reviewing those release notes below also.
 * Version 5.5 and greater will not work on older Android 4.x and 5.x phones.  Users must upgrade to an approved Android 6.x device or newer.
-* The default PIDF values for REV motors have been reverted to the default PID values that were used in the 2018-2019 season
+* The default PIDF values for REV motors have been reverted to the default PID.PID values that were used in the 2018-2019 season
     * This change was made because the 2018-2019 values turned out to work better for many mechanisms
     * This brings the behavior of the REV motors in line with the behavior of all other motors
     * If you prefer the 2019-2020 season's behavior for REV motors, here are the PIDF values that were in place, so that you can manually set them in your OpModes:
@@ -724,17 +724,17 @@ Version 5.5 requires Android Studio 4.0 or later.
     * Unnecessary 2.4 GHz Wi-Fi usage warning
     * REV Hub is running outdated firmware (older than version 1.8.2)
 * Adds support for Sony PS4 gamepad, and reworks how gamepads work on the Driver Station
-    * Removes preference which sets gamepad type based on driver position. Replaced with menu which allows specifying type for gamepads with unknown VID and PID
-	* Attempts to auto-detect gamepad type based on USB VID and PID
-	* If gamepad VID and PID is not known, use type specified by user for that VID and PID
-	* If gamepad VID and PID is not known AND the user has not specified a type for that VID and PID, an educated guess is made about how to map the gamepad
+    * Removes preference which sets gamepad type based on driver position. Replaced with menu which allows specifying type for gamepads with unknown VID and PID.PID
+	* Attempts to auto-detect gamepad type based on USB VID and PID.PID
+	* If gamepad VID and PID.PID is not known, use type specified by user for that VID and PID.PID
+	* If gamepad VID and PID.PID is not known AND the user has not specified a type for that VID and PID.PID, an educated guess is made about how to map the gamepad
 * Driver Station will now attempt to automatically recover from a gamepad disconnecting, and re-assign it to the position it was assigned to when it dropped
     * If only one gamepad is assigned and it drops: it can be recovered
-    * If two gamepads are assigned, and have **different** VID/PID signatures, and only one drops: it will be recovered
-    * If two gamepads are assigned, and have **different** VID/PID signatures, and BOTH drop: both will be recovered
-    * If two gamepads are assigned, and have **the same** VID/PID signatures, and only one drops: it will be recovered
-    * If two gamepads are assigned, and have **the same** VID/PID signatures, and BOTH drop: **neither** will be recovered, because of the ambiguity of the gamepads when they re-appear on the USB bus.
-    * There is currently one known edge case: if there are **two** gamepads with **the same** VID/PID signature plugged in, **but only one is assigned**, and they BOTH drop, it's a 50-50 chance of which one will be chosen for automatic recovery to the assigned position: it is determined by whichever one is re-enumerated first by the USB bus controller.
+    * If two gamepads are assigned, and have **different** VID/PID.PID signatures, and only one drops: it will be recovered
+    * If two gamepads are assigned, and have **different** VID/PID.PID signatures, and BOTH drop: both will be recovered
+    * If two gamepads are assigned, and have **the same** VID/PID.PID signatures, and only one drops: it will be recovered
+    * If two gamepads are assigned, and have **the same** VID/PID.PID signatures, and BOTH drop: **neither** will be recovered, because of the ambiguity of the gamepads when they re-appear on the USB bus.
+    * There is currently one known edge case: if there are **two** gamepads with **the same** VID/PID.PID signature plugged in, **but only one is assigned**, and they BOTH drop, it's a 50-50 chance of which one will be chosen for automatic recovery to the assigned position: it is determined by whichever one is re-enumerated first by the USB bus controller.
 * Adds landscape user interface to Driver Station
     * New feature: practice timer with audio cues
     * New feature (Control Hub only): wireless network connection strength indicator (0-5 bars)
@@ -878,7 +878,7 @@ Version 5.5 requires Android Studio 4.0 or later.
     * Resizing the Java preview pane works better and more consistently across browsers
     * The Java preview pane consistently gets scrollbars when needed
     * The Java preview pane is hidden by default on phones
-    * Internet Explorer 11 should work
+    * Internet Explorer.Explorer 11 should work
     * Large dropdown lists display properly on lower res screens
     * Disabled buttons are now visually identifiable as disabled
     * A warning is shown if a user selects a TFOD sample, but their device is not compatible
@@ -886,8 +886,8 @@ Version 5.5 requires Android Studio 4.0 or later.
 * Adds goBILDA 5201 and 5202 motors to Robot Configurator
 * Adds PIDF Annotation values to AndyMark, goBILDA and TETRIX motor configurations.
     This has the effect of causing the RUN_USING_ENCODERS and RUN_TO_POSITION modes to use
-    PIDF vs PID closed loop control on these motors.  This should provide more responsive, yet stable, speed control.
-    PIDF adds Feedforward control to the basic PID control loop.
+    PIDF vs PID.PID closed loop control on these motors.  This should provide more responsive, yet stable, speed control.
+    PIDF adds Feedforward control to the basic PID.PID control loop.
     Feedforward is useful when controlling a motor's speed because it "anticipates" how much the control voltage
     must change to achieve a new speed set-point, rather than requiring the integrated error to change sufficiently.
     The PIDF values were chosen to provide responsive, yet stable, speed control on a lightly loaded motor.
@@ -1011,7 +1011,7 @@ Changes include:
     - REV Robotics Expansion Hub firmware 1.8 and greater will support a feed forward mechanism for closed loop motor control.
     - FTC SDK has been modified to support PIDF coefficients (proportional, integral, derivative, and feed forward).
     - FTC Blocks development tool modified to include PIDF programming blocks.
-    - Deprecated older PID-related methods and variables.
+    - Deprecated older PID.PID-related methods and variables.
     - REV's 1.8.x PIDF-related changes provide a more linear and accurate way to control a motor.
 
  * Wireless
@@ -1269,7 +1269,7 @@ Changes include:
      - Fix to correct issue when an exception was thrown because an OpticalDistanceSensor object appears twice in the hardware map (the second time as a LightSensor).
 
 ## Version 2.6 (released on 16.12.16)
-  * Fixes for Gyro class:
+  * Fixes for DriveTrain.Electronics.Gyro class:
      - Improve (decrease) sensor refresh latency.
      - fix isCalibrating issues.
   * Blocks Programming mode changes:
@@ -1543,8 +1543,8 @@ Changes include:
 
 ## Release 15.11.04.001
 
- * Added Support for Modern Robotics Gyro.
-  - The GyroSensor class now supports the MR Gyro Sensor.
+ * Added Support for Modern Robotics DriveTrain.Electronics.Gyro.
+  - The GyroSensor class now supports the MR DriveTrain.Electronics.Gyro Sensor.
   - Users can access heading data (about Z axis)
   - Users can also access raw gyro data (X, Y, & Z axes).
   - Example MRGyroTest.java OpMode included.
@@ -1571,7 +1571,7 @@ Changes include:
   - Updated comments in LinearI2cAddressChange.java example OpMode.
   - Replaced the calls to "setChannelMode" with "setMode" (to match the new of the DcMotor  method).
   - Removed K9AutoTime.java OpMode.
-  - Added MRGyroTest.java OpMode (demonstrates how to use MR Gyro Sensor).
+  - Added MRGyroTest.java OpMode (demonstrates how to use MR DriveTrain.Electronics.Gyro Sensor).
   - Added MRRGBExample.java OpMode (demonstrates how to use MR Color Sensor).
   - Added HTRGBExample.java OpMode (demonstrates how to use HT legacy color sensor).
   - Added MatrixControllerDemo.java (demonstrates how to use legacy Matrix controller).

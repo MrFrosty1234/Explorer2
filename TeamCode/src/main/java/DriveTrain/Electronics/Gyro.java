@@ -1,11 +1,14 @@
+package DriveTrain.Electronics;
+
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import Explorer.Explorer;
 
 public class Gyro {
 
@@ -20,7 +23,7 @@ public class Gyro {
 
             explorer = robot;
 
-            gyro = explorer.linearOpMode.hardwareMap.get(IMU.class,"imu");
+            gyro = BaseSensors.gyro;
             Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
             RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot

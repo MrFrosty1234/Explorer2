@@ -1,5 +1,4 @@
 import static java.lang.Math.abs;
-import static java.lang.Math.random;
 import static java.lang.Math.signum;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -38,6 +37,8 @@ public class DriveTrain {
     TouchSensor buttonLeft;
     TouchSensor buttonRight;
     AnalogInput sonar;
+
+    Explorer explorer
 
     State state = State.MOVING_TO_WALL;
     ElapsedTime ti;

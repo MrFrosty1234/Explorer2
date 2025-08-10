@@ -1,7 +1,6 @@
 import static com.qualcomm.hardware.ams.AMSColorSensor.AMS_TCS34725_ADDRESS;
 
 import static java.lang.Math.round;
-import static java.lang.Math.sqrt;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.adafruit.AdafruitI2cColorSensor;
@@ -17,7 +16,7 @@ public class ColorDetective {
     AdafruitI2cColorSensor colorFieldSensor;
     AdafruitI2cColorSensor colorPuckDetectiveSensor;
 
-    Explorer explorer;
+     explorer;
 
     public int ourColor = 0;
 
