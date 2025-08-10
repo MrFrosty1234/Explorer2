@@ -24,9 +24,9 @@ public class DriveTrainController {
 
     PID pidMove;
 
-    ElapsedTime ti;
+    public ElapsedTime ti;
 
-    DriveTrainListener driveTrainListener;
+    DriveTrainSensorsListener driveTrainSensorsListener;
 
     Explorer explorer;
 
@@ -40,7 +40,7 @@ public class DriveTrainController {
 
     double stableAngle = 0;
 
-    States states;
+    public States states;
 
     public DriveTrainController(Explorer explorer){
         this.explorer = explorer;
@@ -52,18 +52,20 @@ public class DriveTrainController {
 
         motorR = BaseMotors.rightMotor;
 
-        driveTrainListener = new DriveTrainListener(explorer);
+        driveTrainSensorsListener = new DriveTrainSensorsListener(explorer);
 
         pid = new PID(kPXAngle, kDXAngle, kIXAngle);
 
         pidMove = new PID(kPX, kPD, kPI);
+
+
     }
 
     public boolean turn(double angle){
 
-        if(ti.seconds() < 5 && driveTrainListener.getAngle() < angle){
+        if(ti.seconds() < 5 && driveTrainSensorsListener.getAngle() < angle){
 
-            double err = angle - driveTrainListener.getAngle();
+            double err = angle - driveTrainSensorsListener.getAngle();
 
             double power =  pid.update(err);
 
@@ -81,14 +83,14 @@ public class DriveTrainController {
         ti.reset();
 
         states = States.MOVE_TO_WALL;
-        stableAngle = driveTrainListener.getAngle();
+        stableAngle = driveTrainSensorsListener.getAngle();
         return true;
     }
 
     public boolean moveToWall() {
 
-        if (!driveTrainListener.getButtonsValue() && ti.seconds() < 3) {
-            double err = stableAngle - driveTrainListener.getAngle();
+        if (!driveTrainSensorsListener.getButtonsValue() && ti.seconds() < 3 && driveTrainSensorsListener.getDist() < 30) {
+            double err = stableAngle - driveTrainSensorsListener.getAngle();
 
             double power = pidMove.update(err);
 
@@ -99,14 +101,14 @@ public class DriveTrainController {
         BaseMotors.stop();
         ti.reset();
         states = States.MOVE_WIH_TIMER;
-        stableAngle = driveTrainListener.getAngle();
+        stableAngle = driveTrainSensorsListener.getAngle();
         return true;
     }
 
     public boolean moveWithTimers(double time){
 
         if(ti.seconds() < time){
-            double err = stableAngle - driveTrainListener.getAngle();
+            double err = stableAngle - driveTrainSensorsListener.getAngle();
 
             double power = pidMove.update(err);
 
@@ -117,7 +119,7 @@ public class DriveTrainController {
         BaseMotors.stop();
         ti.reset();
         states = States.TURN;
-        stableAngle = driveTrainListener.getAngle();
+        stableAngle = driveTrainSensorsListener.getAngle();
         return true;
 
     }

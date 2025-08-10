@@ -1,18 +1,16 @@
 package DriveTrain;
 
-import android.provider.ContactsContract;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import DriveTrain.Electronics.BaseSensors;
 import DriveTrain.Electronics.Gyro;
 import Explorer.Explorer;
+import Utilities.I2cPort;
 
 @Config
 
-public class DriveTrainListener {
+public class DriveTrainSensorsListener {
 
     Explorer explorer;
 
@@ -21,14 +19,15 @@ public class DriveTrainListener {
 
     public Gyro gyro;
 
+    I2cPort sonar;
 
 
-    ///to do write ultrasonic
-    public DriveTrainListener(Explorer explorer){
+    public DriveTrainSensorsListener(Explorer explorer){
         this.explorer = explorer;
 
         rightBut = BaseSensors.rightButton;
         leftBut = BaseSensors.leftButton;
+        sonar = BaseSensors.sonar;
 
     }
 
@@ -43,4 +42,11 @@ public class DriveTrainListener {
     public double getAngle(){
         return gyro.getAngle();
     }
+
+    public double getDist(){
+        BaseSensors.sonar.write((byte) 5);
+        return sonar.read();
+
+    }
+
 }

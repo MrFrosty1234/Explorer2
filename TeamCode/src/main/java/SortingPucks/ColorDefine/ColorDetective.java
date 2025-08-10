@@ -17,8 +17,8 @@ import Explorer.Explorer;
 
 public class ColorDetective {
 
-    AdafruitI2cColorSensor colorFieldSensor;
-    AdafruitI2cColorSensor colorPuckDetectiveSensor;
+    public AdafruitI2cColorSensor colorFieldSensor;
+    public AdafruitI2cColorSensor colorPuckDetectiveSensor;
 
     Explorer explorer;
 

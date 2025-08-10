@@ -4,6 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import DriveTrain.States;
+import Explorer.Explorer;
+
 
 @TeleOp
 
@@ -24,9 +27,9 @@ public class OpModeRomochkaBlue extends LinearOpMode {
 
         boolean zalupa = false;
 
-        explorer.driveTrain.state = DriveTrain.State.MOVING_TO_WALL;
+        explorer.driveTrainController.states = States.MOVE_TO_WALL;
 
-        explorer.driveTrain.ti.reset();
+        explorer.driveTrainController.ti.reset();
 
         while (opModeIsActive()) {
 
@@ -37,8 +40,8 @@ public class OpModeRomochkaBlue extends LinearOpMode {
             FtcDashboard.getInstance().getTelemetry().addData("blue", explorer.colorDetective.colorPuckDetectiveSensor.blue());
             FtcDashboard.getInstance().getTelemetry().addData("green", explorer.colorDetective.colorPuckDetectiveSensor.green());
             FtcDashboard.getInstance().getTelemetry().update();
-            explorer.colorDetective.sorting();
-            explorer.colorDetective.getOut();
+            explorer.sortingAndUnloading.sorting();
+            explorer.sortingAndUnloading.getOut();
             explorer.sortingAndKeep.brushOn();
 
             explorer.update();
