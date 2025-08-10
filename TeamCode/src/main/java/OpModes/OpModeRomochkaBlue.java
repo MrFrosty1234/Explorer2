@@ -1,9 +1,13 @@
+package OpModes;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+
 @TeleOp
-public class OpModeRomochkaForRed extends LinearOpMode {
+
+public class OpModeRomochkaBlue extends LinearOpMode {
 
     Explorer explorer = null;
     public static double sepraratorMove;
@@ -26,8 +30,8 @@ public class OpModeRomochkaForRed extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            explorer.colorDetective.ourColor = 1;
-            explorer.colorDetective.notOurColor = 2;
+            explorer.colorDetective.ourColor = 2;
+            explorer.colorDetective.notOurColor = 1;
             FtcDashboard.getInstance().getTelemetry().addData("color",explorer.colorDetective.puckDetect());
             FtcDashboard.getInstance().getTelemetry().addData("red", explorer.colorDetective.colorPuckDetectiveSensor.red());
             FtcDashboard.getInstance().getTelemetry().addData("blue", explorer.colorDetective.colorPuckDetectiveSensor.blue());
@@ -37,7 +41,7 @@ public class OpModeRomochkaForRed extends LinearOpMode {
             explorer.colorDetective.getOut();
             explorer.sortingAndKeep.brushOn();
 
-             explorer.update();
+            explorer.update();
         }
     }
 }

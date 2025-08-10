@@ -1,3 +1,4 @@
+package Utilities;
 
 import androidx.annotation.NonNull;
 
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.DevicePropertie
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 
 @I2cDeviceType
-@DeviceProperties(name = "I2cPort", xmlTag = "i2cport")
+@DeviceProperties(name = "Utilities.I2cPort", xmlTag = "i2cport")
 public class I2cPort extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     private I2cAddr _i2cAddress = null;
 
@@ -51,6 +52,6 @@ public class I2cPort extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
     @Override
     public String getDeviceName() {
-        return "I2cPort";
+        return "Utilities.I2cPort";
     }
 }

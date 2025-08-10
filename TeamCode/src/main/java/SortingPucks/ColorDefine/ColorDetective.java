@@ -1,3 +1,5 @@
+package SortingPucks.ColorDefine;
+
 import static com.qualcomm.hardware.ams.AMSColorSensor.AMS_TCS34725_ADDRESS;
 
 import static java.lang.Math.round;
@@ -9,6 +11,8 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchDeviceWithParameters;
 
 import java.lang.reflect.Field;
 
+import Explorer.Explorer;
+
 @Config
 
 public class ColorDetective {
@@ -16,7 +20,7 @@ public class ColorDetective {
     AdafruitI2cColorSensor colorFieldSensor;
     AdafruitI2cColorSensor colorPuckDetectiveSensor;
 
-     explorer;
+    Explorer explorer;
 
     public int ourColor = 0;
 
@@ -51,49 +55,6 @@ public class ColorDetective {
 
     public boolean statePuck = false;
     public double time = System.currentTimeMillis() / 1000.0;
-
-
-    public boolean sorting() {
-        double t = System.currentTimeMillis() / 1000.0;
-        int color = puckDetect();
-        int field = fieldDetect();
-        if (statePuck) {
-            statePuck = explorer.sortingAndKeep.separatorPosition(0);
-            return false;
-        }
-        if (t - time > 1 && field == 0) {
-            t = System.currentTimeMillis() / 1000.0;
-            if (color == ourColor) {
-                statePuck = explorer.sortingAndKeep.separatorPosition(1);
-                time = t;
-                return true;
-            }
-            if (color == notOurColor) {
-                statePuck = explorer.sortingAndKeep.separatorPosition(-1);
-                time = t;
-                return true;
-            }
-        }
-        statePuck = explorer.sortingAndKeep.separatorPosition(0);
-        return false;
-
-    }
-
-    public boolean getOut() {
-        int color = fieldDetect();
-        if (color == 0 || color == notOurColor) {
-            explorer.sortingAndKeep.closeServo();
-            explorer.sortingAndKeep.separatorPosition(0);
-            return false;
-        }
-        if (color == ourColor) {
-            explorer.sortingAndKeep.separatorPosition(0);
-            explorer.sortingAndKeep.openServo();
-            return true;
-        }
-        return false;
-    }
-
 
     public static AdafruitI2cColorSensor fix(AdafruitI2cColorSensor sensor) {
         try {
