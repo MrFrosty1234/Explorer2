@@ -2,6 +2,8 @@ package DriveTrain.Electronics;
 
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
+import com.qualcomm.hardware.bosch.BHI260IMU;
+import com.qualcomm.hardware.bosch.BNO055IMUNew;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -20,16 +22,14 @@ public class Gyro {
         Explorer explorer;
 
         public Gyro(Explorer robot){
-
+            gyro = robot.linearOpMode.hardwareMap.get(IMU .class, "imu");
             explorer = robot;
 
-            gyro = BaseSensors.gyro;
             Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
             RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot
                     (RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
-            gyro.initialize(new IMU.    Parameters(orientationOnRobot));
-
+            gyro.initialize(new IMU.Parameters(orientationOnRobot));
             reset();
         }
         public void reset(){

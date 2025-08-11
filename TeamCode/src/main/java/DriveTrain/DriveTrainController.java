@@ -24,13 +24,13 @@ public class DriveTrainController {
 
     PID pidMove;
 
-    public ElapsedTime ti;
+    public ElapsedTime ti = new ElapsedTime();
 
     DriveTrainSensorsListener driveTrainSensorsListener;
 
     Explorer explorer;
 
-    public static double kPXAngle = 0.01;
+    public static double kPXAngle = 0.005;
     public static double kDXAngle = 0;
     public static double kIXAngle = 0;
 
@@ -48,9 +48,8 @@ public class DriveTrainController {
         BaseMotors.init(explorer.linearOpMode.hardwareMap);
         BaseSensors.init(explorer.linearOpMode.hardwareMap);
 
-        motorL = BaseMotors.leftMotor;
-
         motorR = BaseMotors.rightMotor;
+        motorL = BaseMotors.leftMotor;
 
         driveTrainSensorsListener = new DriveTrainSensorsListener(explorer);
 
@@ -63,15 +62,17 @@ public class DriveTrainController {
 
     public boolean turn(double angle){
 
-        if(ti.seconds() < 5 && driveTrainSensorsListener.getAngle() < angle){
+        double err = angle - driveTrainSensorsListener.getAngle();
 
-            double err = angle - driveTrainSensorsListener.getAngle();
+        if(ti.seconds() < 2 && abs(err) > 5){
+
+            err = angle - driveTrainSensorsListener.getAngle();
 
             double power =  pid.update(err);
 
-            if(abs(power) > 1)
-                power = 1 * signum(power);
-            motorR.setPower(power);
+            if(abs(power) > 0.8)
+                power = 0.8 * signum(power);
+            motorR.setPower(-power);
             motorL.setPower(power);
             FtcDashboard.getInstance().getTelemetry().addData("powa", power);
             FtcDashboard.getInstance().getTelemetry().addData("gyro", explorer.gyro.getAngle());
@@ -80,46 +81,40 @@ public class DriveTrainController {
 
         }
         BaseMotors.stop();
+        states = States.MOVE_TO_WALL;
         ti.reset();
 
-        states = States.MOVE_TO_WALL;
-        stableAngle = driveTrainSensorsListener.getAngle();
+
         return true;
     }
 
     public boolean moveToWall() {
 
-        if (!driveTrainSensorsListener.getButtonsValue() && ti.seconds() < 3 && driveTrainSensorsListener.getDist() < 30) {
-            double err = stableAngle - driveTrainSensorsListener.getAngle();
-
-            double power = pidMove.update(err);
-
-            motorR.setPower(power);
-            motorL.setPower(power);
+        if(driveTrainSensorsListener.rightBut.getState() && driveTrainSensorsListener.leftBut.getState() && ti.seconds() < 3 ) {
+            motorR.setPower(1);
+            motorL.setPower(1);
             return false;
         }
         BaseMotors.stop();
         ti.reset();
         states = States.MOVE_WIH_TIMER;
-        stableAngle = driveTrainSensorsListener.getAngle();
         return true;
     }
 
-    public boolean moveWithTimers(double time){
+    public boolean moveWithTimers(double time, double orientation){
 
         if(ti.seconds() < time){
-            double err = stableAngle - driveTrainSensorsListener.getAngle();
 
-            double power = pidMove.update(err);
+            motorR.setPower(0.5 * signum(orientation));
+            motorL.setPower(0.5 * signum(orientation));
+            FtcDashboard.getInstance().getTelemetry().addData("ti", ti.seconds());
+            FtcDashboard.getInstance().getTelemetry().update();
 
-            motorR.setPower(power);
-            motorL.setPower(power);
             return false;
         }
         BaseMotors.stop();
         ti.reset();
         states = States.TURN;
-        stableAngle = driveTrainSensorsListener.getAngle();
         return true;
 
     }
@@ -132,11 +127,12 @@ public class DriveTrainController {
                     angle = 60;
                 if(abs(angle) > 100)
                     angle = 100;
-                turn(angle);
+                turn(abs(angle));
+
             case MOVE_TO_WALL:
                 moveToWall();
             case MOVE_WIH_TIMER:
-                moveWithTimers(1);
+                moveWithTimers(1, -1);
         }
     }
 

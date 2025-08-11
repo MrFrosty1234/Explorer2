@@ -25,7 +25,7 @@ public class BaseSensors {
 
         leftButton = hardwareMap.get(DigitalChannel.class, "leftButton");
 
-        gyro = hardwareMap.get(IMU.class, "gyro");
+
 
         sonar = hardwareMap.get(I2cPort.class, "sonar");
         sonar.initWithI2cAddress(I2cAddr.create7bit(5));

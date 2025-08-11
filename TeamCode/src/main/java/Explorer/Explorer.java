@@ -1,14 +1,14 @@
 package Explorer;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import DriveTrain.DriveTrainController;
+import DriveTrain.DriveTrainSensorsListener;
+import DriveTrain.Electronics.BaseMotors;
 import DriveTrain.Electronics.BaseSensors;
 import DriveTrain.Electronics.Gyro;
 import SortingPucks.ColorDefine.ColorDetective;
 import SortingPucks.Sorting.SortingAndKeep;
-import SortingPucks.SortingAndUnloading;
 
 
 public class Explorer {
@@ -17,13 +17,15 @@ public class Explorer {
 
     public DriveTrainController driveTrainController;
 
+    public DriveTrainSensorsListener driveTrainSensorsListener;
+
     public SortingAndKeep sortingAndKeep;
 
     public LinearOpMode linearOpMode;
 
     public ColorDetective colorDetective;
 
-    public SortingAndUnloading sortingAndUnloading;
+
 
 
 
@@ -33,17 +35,17 @@ public class Explorer {
         driveTrainController = new DriveTrainController(this);
         sortingAndKeep = new SortingAndKeep(this);
         colorDetective = new ColorDetective(this);
-        sortingAndUnloading = new SortingAndUnloading(this);
+
+        driveTrainSensorsListener = new DriveTrainSensorsListener(this);
     }
 
     public void init(){
         BaseSensors.init(linearOpMode.hardwareMap);
-        BaseSensors.init(linearOpMode.hardwareMap);
+        BaseMotors.init(linearOpMode.hardwareMap);
 
     }
 
     public void update(){
-        gyro.update();
         driveTrainController.update();
     }
 

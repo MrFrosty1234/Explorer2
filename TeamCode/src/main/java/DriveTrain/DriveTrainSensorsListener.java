@@ -2,6 +2,9 @@ package DriveTrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import DriveTrain.Electronics.BaseSensors;
 import DriveTrain.Electronics.Gyro;
@@ -17,7 +20,7 @@ public class DriveTrainSensorsListener {
     public DigitalChannel rightBut;
     public DigitalChannel leftBut;
 
-    public Gyro gyro;
+    public IMU gyro;
 
     I2cPort sonar;
 
@@ -28,6 +31,7 @@ public class DriveTrainSensorsListener {
         rightBut = BaseSensors.rightButton;
         leftBut = BaseSensors.leftButton;
         sonar = BaseSensors.sonar;
+        gyro = explorer.linearOpMode.hardwareMap.get(IMU.class,"imu");
 
     }
 
@@ -40,7 +44,7 @@ public class DriveTrainSensorsListener {
     }
 
     public double getAngle(){
-        return gyro.getAngle();
+        return gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
     public double getDist(){

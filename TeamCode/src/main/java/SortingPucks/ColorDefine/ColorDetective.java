@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchDeviceWithParameters;
 import java.lang.reflect.Field;
 
 import Explorer.Explorer;
+import SortingPucks.Sorting.SortingAndKeep;
 
 @Config
 
@@ -19,6 +20,8 @@ public class ColorDetective {
 
     public AdafruitI2cColorSensor colorFieldSensor;
     public AdafruitI2cColorSensor colorPuckDetectiveSensor;
+
+    SortingAndKeep sortingAndKeep;
 
     Explorer explorer;
 
@@ -30,6 +33,7 @@ public class ColorDetective {
         explorer = robot;
         colorFieldSensor = fix(explorer.linearOpMode.hardwareMap.get(AdafruitI2cColorSensor.class, "fieldSensor"));
         colorPuckDetectiveSensor = fix(explorer.linearOpMode.hardwareMap.get(AdafruitI2cColorSensor.class, "puckSensor"));
+        sortingAndKeep = new SortingAndKeep(explorer);
     }
 
     public int puckDetect() {
@@ -43,18 +47,62 @@ public class ColorDetective {
         return 0;
     }
 
-   public int fieldDetect() {
-        if (colorFieldSensor.red() < 350 && colorFieldSensor.blue() < 350 && colorFieldSensor.green() < 350 ) {
-            if (colorFieldSensor.red() > colorFieldSensor.blue())
+    public int fieldDetect() {
+        if (colorFieldSensor.red() < 350 && colorFieldSensor.blue() < 350 && colorFieldSensor.green() < 350) {
+            if (colorFieldSensor.red() > colorFieldSensor.blue()  && colorFieldSensor.red() > colorFieldSensor.green())
                 return 1;
-            if (colorFieldSensor.blue() > colorFieldSensor.red())
+            if (colorFieldSensor.blue() > colorFieldSensor.red() && colorFieldSensor.blue() > colorFieldSensor.green())
                 return 2;
         }
         return 0;
     }
 
+
+    double time = System.currentTimeMillis() / 1000.0;
+
     public boolean statePuck = false;
-    public double time = System.currentTimeMillis() / 1000.0;
+
+    public boolean sorting() {
+        double t = System.currentTimeMillis() / 1000.0;
+        int color = puckDetect();
+        int field = fieldDetect();
+        if (statePuck) {
+            statePuck = sortingAndKeep.separatorPosition(0);
+            return false;
+        }
+        if (t - time > 1 && field == 0){
+            t = System.currentTimeMillis() / 1000.0;
+            if (color == ourColor) {
+                statePuck = sortingAndKeep.separatorPosition(1);
+                time = t;
+                return true;
+            }
+            if (color == notOurColor) {
+                statePuck = sortingAndKeep.separatorPosition(-1);
+                time = t;
+                return true;
+            }
+        }
+        statePuck = sortingAndKeep.separatorPosition(0);
+        return false;
+
+    }
+
+    public boolean getOut() {
+        int color = explorer.colorDetective.fieldDetect();
+        if (color == 0 || color == explorer.colorDetective.notOurColor) {
+            sortingAndKeep.closeServo();
+            sortingAndKeep.separatorPosition(0);
+            return false;
+        }
+        if (color == explorer.colorDetective.ourColor) {
+            sortingAndKeep.separatorPosition(0);
+            sortingAndKeep.openServo();
+            return true;
+        }
+        return false;
+    }
+
 
     public static AdafruitI2cColorSensor fix(AdafruitI2cColorSensor sensor) {
         try {

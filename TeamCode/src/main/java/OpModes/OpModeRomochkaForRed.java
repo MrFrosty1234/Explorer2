@@ -38,8 +38,7 @@ public class OpModeRomochkaForRed extends LinearOpMode {
             FtcDashboard.getInstance().getTelemetry().addData("blue", explorer.colorDetective.colorPuckDetectiveSensor.blue());
             FtcDashboard.getInstance().getTelemetry().addData("green", explorer.colorDetective.colorPuckDetectiveSensor.green());
             FtcDashboard.getInstance().getTelemetry().update();
-            explorer.sortingAndUnloading.sorting();
-            explorer.sortingAndUnloading.getOut();
+
             explorer.sortingAndKeep.brushOn();
 
              explorer.update();
